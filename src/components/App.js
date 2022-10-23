@@ -1,6 +1,6 @@
 import '../App.css';
 import { useState, useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import api from "../utils/api";
 
 import Header from './Header';
@@ -12,6 +12,8 @@ import EditAvatarPopup from './EditAvatarPopup';
 import ImagePopup from './ImagePopup';
 import ConfirmDeletePopup from './ConfirmDeletePopup';
 import Login from './Login';
+import Register from './Register';
+import ProtectedRoute from './ProtectedRoute';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
@@ -25,6 +27,7 @@ function App() {
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
@@ -127,10 +130,25 @@ function App() {
   return (
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
+
         <Header />
 
         <Switch>
-          <Route exact path="/">
+
+          <ProtectedRoute
+            exact path="/"
+            loggedIn={loggedIn}
+            component={Main}
+            onEditAvatar={handleEditAvatarClick}
+            onEditProfile={handleEditProfileClick}
+            onAddCard={handleAddCardClick}
+            onCardDelete={handleConfirmDeleteClick}
+            onCardClick={handleCardClick}
+            onCardLike={handleCardLike}
+            cards={cards}
+          />
+
+          {/* <Route exact path="/">
             <Main
               onEditAvatar={handleEditAvatarClick}
               onEditProfile={handleEditProfileClick}
@@ -140,10 +158,20 @@ function App() {
               onCardLike={handleCardLike}
               cards={cards}
             />
-          </Route>
-          <Route path="/sign-in">
+          </Route> */}
+
+          <Route path="/signin">
             <Login />
           </Route>
+
+          <Route path="/signup">
+            <Register />
+          </Route>
+
+          <Route exact path="/">
+            {loggedIn ? <Redirect to="/" /> : <Redirect to="signin" />}
+          </Route>
+
         </Switch>
 
         <Footer />
@@ -178,6 +206,7 @@ function App() {
           onSubmitDelete={handleCardDelete}
           card={selectedCard}
         />
+
       </CurrentUserContext.Provider>
     </div>
   );

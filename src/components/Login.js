@@ -4,11 +4,27 @@ function Login() {
 
   return (
     <div className="login">
-      <h1 className="login__title">Вход</h1>
+      <h2 className="login__title">Вход</h2>
       <form className="login__form">
-        <input className="login__input login__input_email" placeholder="Email" />
-        <input className="login__input login__input_password" placeholder="Password" />
-        <button className="login__button">Войти</button>
+        <input
+          className="login__input login__input_email"
+          type="email"
+          name="email"
+          placeholder="Email"
+          required
+          autoComplete="off"
+        />
+        <input
+          className="login__input login__input_password"
+          type="password"
+          name="password"
+          placeholder="Password"
+          minLength="7"
+          maxLength="30"
+          required
+          autoComplete="off"
+        />
+        <button className="login__button" type="submit">Войти</button>
       </form>
     </div>
   );
