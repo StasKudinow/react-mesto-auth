@@ -1,5 +1,6 @@
 import '../App.css';
 import { useState, useEffect } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import api from "../utils/api";
 
 import Header from './Header';
@@ -10,6 +11,7 @@ import AddCardPopup from './AddCardPopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import ImagePopup from './ImagePopup';
 import ConfirmDeletePopup from './ConfirmDeletePopup';
+import Login from './Login';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
@@ -125,52 +127,57 @@ function App() {
   return (
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
+        <Header />
 
-          <Header />
+        <Switch>
+          <Route exact path="/">
+            <Main
+              onEditAvatar={handleEditAvatarClick}
+              onEditProfile={handleEditProfileClick}
+              onAddCard={handleAddCardClick}
+              onCardDelete={handleConfirmDeleteClick}
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              cards={cards}
+            />
+          </Route>
+          <Route path="/sign-in">
+            <Login />
+          </Route>
+        </Switch>
 
-          <Main 
-            onEditAvatar={handleEditAvatarClick}
-            onEditProfile={handleEditProfileClick}
-            onAddCard={handleAddCardClick}
-            onCardDelete={handleConfirmDeleteClick}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
-            cards={cards}
-          />
+        <Footer />
 
-          <Footer />
+        <EditProfilePopup
+          isOpen={ isEditProfilePopupOpen && 'popup_opened' }
+          onClose={closeAllPopups}
+          onUpdateUser={handleUpdateUser}
+        />
 
-          <EditProfilePopup
-            isOpen={ isEditProfilePopupOpen && 'popup_opened' }
-            onClose={closeAllPopups}
-            onUpdateUser={handleUpdateUser}
-          />
+        <AddCardPopup
+          isOpen={ isAddCardPopupOpen && 'popup_opened' }
+          onClose={closeAllPopups}
+          onAddCard={handleAddCardSubmit}
+        />
 
-          <AddCardPopup
-            isOpen={ isAddCardPopupOpen && 'popup_opened' }
-            onClose={closeAllPopups}
-            onAddCard={handleAddCardSubmit}
-          />
+        <EditAvatarPopup
+          isOpen={ isEditAvatarPopupOpen && 'popup_opened' }
+          onClose={closeAllPopups}
+          onUpdateAvatar={handleUpdateAvatar}
+        />
 
-          <EditAvatarPopup
-            isOpen={ isEditAvatarPopupOpen && 'popup_opened' }
-            onClose={closeAllPopups}
-            onUpdateAvatar={handleUpdateAvatar}
-          />
+        <ImagePopup
+          isOpen={ isImagePopupOpen && 'popup_opened' }
+          onClose={closeAllPopups}
+          card={selectedCard}
+        />
 
-          <ImagePopup
-            isOpen={ isImagePopupOpen && 'popup_opened' }
-            onClose={closeAllPopups}
-            card={selectedCard}
-          />
-
-          <ConfirmDeletePopup
-            isOpen={ isConfirmDeletePopupOpen && 'popup_opened' }
-            onClose={closeAllPopups}
-            onSubmitDelete={handleCardDelete}
-            card={selectedCard}
-          />
-
+        <ConfirmDeletePopup
+          isOpen={ isConfirmDeletePopupOpen && 'popup_opened' }
+          onClose={closeAllPopups}
+          onSubmitDelete={handleCardDelete}
+          card={selectedCard}
+        />
       </CurrentUserContext.Provider>
     </div>
   );
