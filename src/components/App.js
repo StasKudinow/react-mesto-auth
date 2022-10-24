@@ -1,7 +1,8 @@
 import '../App.css';
 import { useState, useEffect } from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import api from "../utils/api";
+import * as auth from '../utils/auth';
 
 import Header from './Header';
 import Main from './Main';
@@ -28,6 +29,8 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
+
+  const history = useHistory();
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
@@ -60,6 +63,7 @@ function App() {
     setSelectedCard({});
   };
 
+  // API
   function handleUpdateUser(data) {
     api.setUserInfo(data)
       .then((userData) => {
@@ -115,6 +119,45 @@ function App() {
       })
   };
 
+  function onRegister({ password, email }) {
+    return auth.register(password, email)
+      .then((res) => {
+        return res;
+      })
+  };
+
+  function onLogin({ password, email }) {
+    return auth.authorize(password, email)
+      .then((data) => {
+        if(data.jwt) {
+          setLoggedIn(true);
+          localStorage.setItem('jwt', data.jwt);
+        }
+      })
+  };
+
+  function checkToken(jwt) {
+    return auth.getToken(jwt)
+      .then((res) => {
+        if(res) {
+          setLoggedIn(true);
+        }
+      })
+  };
+
+  useEffect(() => {
+    const jwt = localStorage.getItem('jwt');
+    if(jwt) {
+      checkToken(jwt);
+    }
+  }, []);
+
+  useEffect(() => {
+    if(loggedIn) {
+      history.push('/')
+    }
+  }, [loggedIn]);
+
   useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
       .then(([userData, cardsData]) => {
@@ -161,11 +204,11 @@ function App() {
           </Route> */}
 
           <Route path="/signin">
-            <Login />
+            <Login onLogin={onLogin} />
           </Route>
 
           <Route path="/signup">
-            <Register />
+            <Register onRegister={onRegister} />
           </Route>
 
           <Route exact path="/">
