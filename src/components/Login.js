@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 function Login({ onLogin }) {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+
   const history = useHistory();
 
   const resetForm = useCallback(() => {
@@ -27,7 +28,7 @@ function Login({ onLogin }) {
         history.push('/');
       })
       .catch((err) => {
-        console.log(`Ошибка: ${err}`);
+        console.log(`Ошибка входа: ${err}`);
       })
   }
 

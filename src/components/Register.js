@@ -4,6 +4,7 @@ import { Link, useHistory } from 'react-router-dom';
 function Register({ onRegister }) {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+
   const history = useHistory();
 
   const resetForm = useCallback(() => {
@@ -28,7 +29,7 @@ function Register({ onRegister }) {
         console.log('вылезает попап ОК')
       })
       .catch(() => {
-        console.log('вылезает попап говна');
+        console.log('вылезает попап НЕ ОК');
       })
   };
 
