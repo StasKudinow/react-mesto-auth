@@ -194,7 +194,7 @@ function App() {
         console.log(`Ошибка: ${err}`);
       })
     }
-  }, [loggedIn]);
+  }, [loggedIn, history]);
 
   const handleEsc = useCallback((evt) => {
     if(evt.key === 'Escape') {
@@ -207,7 +207,7 @@ function App() {
     return () => {
       document.removeEventListener("keydown", handleEsc, false);
     };
-  }, []);
+  }, [handleEsc]);
 
 
   return (
