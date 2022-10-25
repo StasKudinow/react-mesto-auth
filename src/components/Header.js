@@ -1,5 +1,4 @@
 import logo from '../images/logo.svg';
-import React from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 
 function Header(props) {

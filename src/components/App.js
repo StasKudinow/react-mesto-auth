@@ -4,10 +4,12 @@ import error from '../images/error.png';
 
 import { useState, useEffect, useCallback } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 import api from "../utils/api";
 import * as auth from '../utils/auth';
 
 import Header from './Header';
+import HeaderMobile from './HeaderMobile';
 import Main from './Main';
 import Footer from './Footer';
 import EditProfilePopup from './EditProfilePopup';
@@ -38,6 +40,8 @@ function App() {
   const [email, setEmail] = useState('');
 
   const history = useHistory();
+
+  const isMobile = useMediaQuery({ query: '(max-width: 619px)' })
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
@@ -205,11 +209,16 @@ function App() {
     };
   }, []);
 
+
   return (
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
 
-        <Header email={email} onLogout={onLogout}/>
+        {isMobile ?
+          <HeaderMobile email={email} onLogout={onLogout}/>
+          :
+          <Header email={email} onLogout={onLogout}/>
+        }
 
         <Switch>
 
