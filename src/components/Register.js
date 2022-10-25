@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-function Register({ onRegister }) {
+function Register({ onRegister, onInfoToolTipWithError, onInfoToolTipWithSuccess }) {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
 
@@ -26,10 +26,12 @@ function Register({ onRegister }) {
       .then(resetForm)
       .then(() => {
         history.push('/signin');
-        console.log('вылезает попап ОК')
+        onInfoToolTipWithSuccess();
+        console.log('Success!');
       })
-      .catch(() => {
-        console.log('вылезает попап НЕ ОК');
+      .catch((err) => {
+        onInfoToolTipWithError();
+        console.log(`Ошибка: ${err}`);
       })
   };
 

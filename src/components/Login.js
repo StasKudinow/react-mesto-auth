@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
-function Login({ onLogin }) {
+function Login({ onLogin, onInfoToolTipWithError }) {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
 
@@ -28,7 +28,8 @@ function Login({ onLogin }) {
         history.push('/');
       })
       .catch((err) => {
-        console.log(`Ошибка входа: ${err}`);
+        onInfoToolTipWithError();
+        console.log(`Ошибка: ${err}`);
       })
   }
 

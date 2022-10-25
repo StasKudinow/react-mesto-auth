@@ -1,5 +1,8 @@
 import '../App.css';
-import { useState, useEffect } from 'react';
+import success from '../images/success.png';
+import error from '../images/error.png';
+
+import { useState, useEffect, useCallback } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import api from "../utils/api";
 import * as auth from '../utils/auth';
@@ -12,6 +15,7 @@ import AddCardPopup from './AddCardPopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import ImagePopup from './ImagePopup';
 import ConfirmDeletePopup from './ConfirmDeletePopup';
+import InfoTooltip from './InfoTooltip';
 import Login from './Login';
 import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
@@ -25,6 +29,8 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isImagePopupOpen, setisImagePopupOpen] = useState(false);
   const [isConfirmDeletePopupOpen, setIsConfirmDeletePopupOpen] = useState(false);
+  const [isInfoToolTipWithError, setIsInfoToolTipWithError] = useState(false);
+  const [isInfoToolTipWithSuccess, setIsInfoToolTipWithSuccess] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
@@ -55,12 +61,22 @@ function App() {
     setIsConfirmDeletePopupOpen(true);
   };
 
+  function handleInfoToolTipWithError() {
+    setIsInfoToolTipWithError(true);
+  };
+
+  function handleInfoToolTipWithSuccess() {
+    setIsInfoToolTipWithSuccess(true);
+  };
+
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
     setIsAddCardPopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setisImagePopupOpen(false);
     setIsConfirmDeletePopupOpen(false);
+    setIsInfoToolTipWithError(false);
+    setIsInfoToolTipWithSuccess(false);
     setSelectedCard({});
   };
 
@@ -128,12 +144,12 @@ function App() {
   };
 
   function onLogin({ password, email }) {
-    // setEmail(email);
     return auth.authorize(password, email)
       .then((res) => {
         if(res.token) {
           localStorage.setItem('jwt', res.token);
           setLoggedIn(true);
+          setEmail(email);
         }
       })
   };
@@ -146,9 +162,12 @@ function App() {
     return auth.getContent(jwt)
       .then((res) => {
         if(res) {
-          setEmail(res.data.email);
           setLoggedIn(true);
+          setEmail(res.data.email);
         }
+      })
+      .catch((err) => {
+        console.log(`Ошибка аутентификации: ${err}`);
       })
   };
 
@@ -161,21 +180,30 @@ function App() {
 
   useEffect(() => {
     if(loggedIn) {
-      history.push('/');
-    }
-  }, [loggedIn]);
-
-  useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getInitialCards()])
+      Promise.all([api.getUserInfo(), api.getInitialCards()])
       .then(([userData, cardsData]) => {
         setCurrentUser(userData);
         setCards(cardsData);
+        history.push('/');
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
       })
+    }
+  }, [loggedIn]);
+
+  const handleEsc = useCallback((evt) => {
+    if(evt.key === 'Escape') {
+      closeAllPopups();
+    }
   }, []);
 
+  useEffect(() => {
+    document.addEventListener("keydown", handleEsc, false);
+    return () => {
+      document.removeEventListener("keydown", handleEsc, false);
+    };
+  }, []);
 
   return (
     <div className="page">
@@ -199,11 +227,18 @@ function App() {
           />
 
           <Route path="/signin">
-            <Login onLogin={onLogin} />
+            <Login
+              onLogin={onLogin}
+              onInfoToolTipWithError={handleInfoToolTipWithError}
+            />
           </Route>
 
           <Route path="/signup">
-            <Register onRegister={onRegister} />
+            <Register
+              onRegister={onRegister}
+              onInfoToolTipWithError={handleInfoToolTipWithError}
+              onInfoToolTipWithSuccess={handleInfoToolTipWithSuccess}
+            />
           </Route>
 
           <Route exact path="/">
@@ -243,6 +278,20 @@ function App() {
           onClose={closeAllPopups}
           onSubmitDelete={handleCardDelete}
           card={selectedCard}
+        />
+
+        <InfoTooltip
+          isOpen={isInfoToolTipWithError && 'popup_opened'}
+          onClose={closeAllPopups}
+          image={error}
+          text={'Что-то пошло не так! Попробуйте ещё раз.'}
+        />
+
+        <InfoTooltip
+          isOpen={isInfoToolTipWithSuccess && 'popup_opened'}
+          onClose={closeAllPopups}
+          image={success}
+          text={'Вы успешно зарегистрировались!'}
         />
 
       </CurrentUserContext.Provider>
