@@ -10,3 +10,9 @@
   background-color: #000000;
   outline: none;
 }
+
+@media screen and (max-width: 879px) {
+  .login__input {
+    padding: 0 0 7px;
+  }
+}

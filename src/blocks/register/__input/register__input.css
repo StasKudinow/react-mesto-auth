@@ -1,6 +1,5 @@
 .register__input {
-  width: 358;
-  padding: 0 0 10px;
+  padding: 0 0 9px;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.2;
@@ -9,4 +8,10 @@
   color: #cccccc;
   background-color: #000000;
   outline: none;
+}
+
+@media screen and (max-width: 879px) {
+  .register__input {
+    padding: 0 0 7px;
+  }
 }

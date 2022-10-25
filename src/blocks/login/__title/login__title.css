@@ -6,3 +6,10 @@
   line-height: 1.2;
   color: #ffffff;
 }
+
+@media screen and (max-width: 879px) {
+  .login__title {
+    margin: 0 0 42px;
+    font-size: 20px;
+  }
+}
