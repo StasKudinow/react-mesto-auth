@@ -2,7 +2,7 @@ import '../App.css';
 import success from '../images/success.png';
 import error from '../images/error.png';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import api from "../utils/api";
@@ -12,6 +12,7 @@ import Header from './Header';
 import HeaderMobile from './HeaderMobile';
 import Main from './Main';
 import Footer from './Footer';
+import Popup from './Popup';
 import EditProfilePopup from './EditProfilePopup';
 import AddCardPopup from './AddCardPopup';
 import EditAvatarPopup from './EditAvatarPopup';
@@ -41,7 +42,7 @@ function App() {
 
   const history = useHistory();
 
-  const isMobile = useMediaQuery({ query: '(max-width: 619px)' })
+  const isMobile = useMediaQuery({ query: '(max-width: 619px)' });
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
@@ -194,20 +195,7 @@ function App() {
         console.log(`Ошибка: ${err}`);
       })
     }
-  }, [loggedIn, history]);
-
-  const handleEsc = useCallback((evt) => {
-    if(evt.key === 'Escape') {
-      closeAllPopups();
-    }
-  }, []);
-
-  useEffect(() => {
-    document.addEventListener("keydown", handleEsc, false);
-    return () => {
-      document.removeEventListener("keydown", handleEsc, false);
-    };
-  }, [handleEsc]);
+  }, [loggedIn]);
 
 
   return (
@@ -258,49 +246,51 @@ function App() {
 
         <Footer />
 
+        <Popup onEscClose={closeAllPopups} />
+
         <EditProfilePopup
-          isOpen={ isEditProfilePopupOpen && 'popup_opened' }
+          isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
         />
 
         <AddCardPopup
-          isOpen={ isAddCardPopupOpen && 'popup_opened' }
+          isOpen={isAddCardPopupOpen}
           onClose={closeAllPopups}
           onAddCard={handleAddCardSubmit}
         />
 
         <EditAvatarPopup
-          isOpen={ isEditAvatarPopupOpen && 'popup_opened' }
+          isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
           onUpdateAvatar={handleUpdateAvatar}
         />
 
         <ImagePopup
-          isOpen={ isImagePopupOpen && 'popup_opened' }
+          isOpen={isImagePopupOpen}
           onClose={closeAllPopups}
           card={selectedCard}
         />
 
         <ConfirmDeletePopup
-          isOpen={ isConfirmDeletePopupOpen && 'popup_opened' }
+          isOpen={isConfirmDeletePopupOpen}
           onClose={closeAllPopups}
           onSubmitDelete={handleCardDelete}
           card={selectedCard}
         />
 
         <InfoTooltip
-          isOpen={isInfoToolTipWithError && 'popup_opened'}
+          isOpen={isInfoToolTipWithError}
           onClose={closeAllPopups}
           image={error}
-          text={'Что-то пошло не так! Попробуйте ещё раз.'}
+          text="Что-то пошло не так! Попробуйте ещё раз."
         />
 
         <InfoTooltip
-          isOpen={isInfoToolTipWithSuccess && 'popup_opened'}
+          isOpen={isInfoToolTipWithSuccess}
           onClose={closeAllPopups}
           image={success}
-          text={'Вы успешно зарегистрировались!'}
+          text="Вы успешно зарегистрировались!"
         />
 
       </CurrentUserContext.Provider>

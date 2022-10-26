@@ -1,6 +1,5 @@
-.login__input {
-  width: 358;
-  padding: 0 0 10px;
+.auth__input {
+  padding: 0 0 9px;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.2;
@@ -12,7 +11,7 @@
 }
 
 @media screen and (max-width: 879px) {
-  .login__input {
+  .auth__input {
     padding: 0 0 7px;
   }
 }

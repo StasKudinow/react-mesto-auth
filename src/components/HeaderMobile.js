@@ -2,6 +2,7 @@ import logo from '../images/logo.svg';
 import { useState } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 
+
 function HeaderMobile(props) {
   const [isClicked, setIsClicked] = useState(false);
 
@@ -9,11 +10,11 @@ function HeaderMobile(props) {
     setIsClicked(!isClicked);
   };
 
-  const headerInfoClassName =(
+  const headerInfoClassName = (
     `header__info ${isClicked ? '' : 'header__info_hidden'}`
   );
 
-  const headerButtonClassName =(
+  const headerButtonClassName = (
     `${isClicked ? 'header__close-button' : 'header__menu-button'}`
   );
 
@@ -43,7 +44,7 @@ function HeaderMobile(props) {
           </header>
         </Route>
       </Switch>
-  )
+  );
 }
 
 export default HeaderMobile;

@@ -29,7 +29,7 @@ function AddCardPopup(props) {
     <PopupWithForm
       name="cards"
       title="Новое место"
-      button={'Создать'}
+      button="Создать"
       isOpen={props.isOpen}
       onClose={props.onClose}
       onSubmit={handleSubmit}>

@@ -1,16 +1,14 @@
 import { useState, useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
+import AuthForm from './AuthForm';
+
+
 function Register({ onRegister, onInfoToolTipWithError, onInfoToolTipWithSuccess }) {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
 
   const history = useHistory();
-
-  const resetForm = useCallback(() => {
-    setPassword('');
-    setEmail('');
-  }, []);
 
   function handlePasswordChange(e) {
     setPassword(e.target.value);
@@ -19,6 +17,11 @@ function Register({ onRegister, onInfoToolTipWithError, onInfoToolTipWithSuccess
   function handleEmailChange(e) {
     setEmail(e.target.value);
   };
+
+  const resetForm = useCallback(() => {
+    setPassword('');
+    setEmail('');
+  }, []);
 
   function handleSubmit(evt) {
     evt.preventDefault();
@@ -35,37 +38,20 @@ function Register({ onRegister, onInfoToolTipWithError, onInfoToolTipWithSuccess
       })
   };
 
+
   return (
-    <div className="register">
-      <h2 className="register__title">Регистрация</h2>
-      <form className="register__form" onSubmit={handleSubmit}>
-        <input
-          className="register__input register__input_email"
-          type="email"
-          name="email"
-          value={email}
-          onChange={handleEmailChange}
-          placeholder="Email"
-          required
-          autoComplete="off"
+    <div className="auth">
+      <h2 className="auth__title">Регистрация</h2>
+        <AuthForm
+          onSubmit={handleSubmit}
+          onPasswordChange={handlePasswordChange}
+          onEmailChange={handleEmailChange}
+          password={password}
+          email={email}
         />
-        <input
-          className="register__input register__input_password"
-          type="password"
-          name="password"
-          value={password}
-          onChange={handlePasswordChange}
-          placeholder="Password"
-          minLength="7"
-          maxLength="30"
-          required
-          autoComplete="off"
-        />
-        <button className="register__button" type="submit">Зарегистрироваться</button>
-      </form>
-      <div className="register__signin">
+      <div className="auth__signin">
         <p>Уже зарегистрированы?</p>
-        <Link to="signin" className="register__signin-link"> Войти</Link>
+        <Link to="signin" className="auth__signin-link"> Войти</Link>
       </div>
     </div>
   );

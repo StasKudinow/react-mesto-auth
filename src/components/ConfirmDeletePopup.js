@@ -15,7 +15,7 @@ function ConfirmDeletePopup(props) {
       onSubmit={handleSubmit}
       name="delete"
       title="Вы уверены?"
-      button={'Да'}
+      button="Да"
     />
   );
 }
