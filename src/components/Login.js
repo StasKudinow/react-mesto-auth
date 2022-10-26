@@ -28,7 +28,7 @@ function Login({ onLogin, onInfoToolTipWithError }) {
     onLogin({ password, email })
       .then(resetForm)
       .then(() => {
-        history.push('/main');
+        history.push('/');
       })
       .catch((err) => {
         onInfoToolTipWithError();

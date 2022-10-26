@@ -189,7 +189,7 @@ function App() {
       .then(([userData, cardsData]) => {
         setCurrentUser(userData);
         setCards(cardsData);
-        history.push('/main');
+        history.push('/');
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
@@ -211,7 +211,7 @@ function App() {
         <Switch>
 
           <ProtectedRoute
-            exact path="/main"
+            exact path="/"
             loggedIn={loggedIn}
             component={Main}
             onEditAvatar={handleEditAvatarClick}
@@ -238,7 +238,7 @@ function App() {
             />
           </Route>
 
-          <Route exact path="/main">
+          <Route exact path="/">
             {loggedIn ? <Redirect to="/" /> : <Redirect to="signin" />}
           </Route>
 
