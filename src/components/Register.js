@@ -48,6 +48,7 @@ function Register({ onRegister, onInfoToolTipWithError, onInfoToolTipWithSuccess
           onEmailChange={handleEmailChange}
           password={password}
           email={email}
+          button="Зарегистрироваться"
         />
       <div className="auth__signin">
         <p>Уже зарегистрированы?</p>

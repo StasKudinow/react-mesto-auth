@@ -21,7 +21,7 @@ function AuthForm(props) {
         maxLength="30"
         required
       />
-      <button className="auth__button" type="submit">Зарегистрироваться</button>
+      <button className="auth__button" type="submit">{props.button}</button>
     </form>
   );
 }
