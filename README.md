@@ -6,4 +6,3 @@
 
 Успехов!
 https://staskudinow.github.io/react-mesto-auth/
-(test)
