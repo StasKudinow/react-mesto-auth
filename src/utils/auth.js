@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://staskudinow.mesto.nomoredomains.club/';
+export const BASE_URL = 'https://auth.nomoreparties.co';
 
 const checkResponse = (response) => {
   if(response.ok) {
